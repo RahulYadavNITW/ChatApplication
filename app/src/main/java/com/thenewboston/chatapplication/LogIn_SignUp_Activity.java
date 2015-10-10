@@ -29,19 +29,20 @@ public class LogIn_SignUp_Activity extends CustomActivity {
         setTouchAndClick(R.id.loginbutton);
         SignUp = (Button) findViewById(R.id.signupbutton);
         LogIn = (Button) findViewById(R.id.loginbutton);
-        textusername =(EditText) findViewById(R.id.textUsername);
+        textusername = (EditText) findViewById(R.id.textUsername);
         textpassword = (EditText) findViewById(R.id.textPassword);
         getSupportActionBar().hide();
     }
 
+
+    //TODO Review - you have one onClick already and then another at line 50
     @Override
     public void onClick(View v) {
-        if (v.getId()==R.id.signupbutton)
-        {
+        if (v.getId() == R.id.signupbutton) {
             SignUp.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
-                    if(hasFocus)
+                    if (hasFocus)
                         SignUp.performClick();
                 }
             });
@@ -51,45 +52,42 @@ public class LogIn_SignUp_Activity extends CustomActivity {
                     username = textusername.getText().toString();
                     password = textpassword.getText().toString();
 
-                    if(username.equals("")||password.equals(""))
-                    {
-                        Utils.showDialog(getApplicationContext(),"Fill in all the Details");
+                    if (username.equals("") || password.equals("")) {
+                        //TODO Review - app crashes , tell me why
+                        Utils.showDialog(getApplicationContext(), "Fill in all the Details");
                     }
-                    final ProgressDialog progressDialog = ProgressDialog.show(LogIn_SignUp_Activity.this,null,"Please Wait...");
+                    final ProgressDialog progressDialog = ProgressDialog.show(LogIn_SignUp_Activity.this, null, "Please Wait...");
                     final ParseUser user = new ParseUser();
-                        user.setUsername(username);
-                        user.setPassword(password);
-                        user.signUpInBackground(new SignUpCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                progressDialog.dismiss();
-                                if(e==null)
-                                {
-                                    Userlist_LeftFragment.user =user;
-                                    Intent intent = new Intent(LogIn_SignUp_Activity.this,HomeScreen.class);
-                                    startActivity(intent);
-                                    setResult(RESULT_OK);
-                                    finish();
-                                }
-                                else
-                                {
-                                    Utils.showDialog(LogIn_SignUp_Activity.this,"Sign Up ERROR : "+ e.getMessage());
-                                    e.printStackTrace();
-                                }
+                    user.setUsername(username);
+                    user.setPassword(password);
+                    user.signUpInBackground(new SignUpCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            progressDialog.dismiss();
+                            if (e == null) {
+                                Userlist_LeftFragment.user = user;
+                                Intent intent = new Intent(LogIn_SignUp_Activity.this, HomeScreen.class);
+                                //TODO Review - Explain the purpose of this.
+                                startActivity(intent);
+                                setResult(RESULT_OK);
+                                finish();
+                            } else {
+                                Utils.showDialog(LogIn_SignUp_Activity.this, "Sign Up ERROR : " + e.getMessage());
+                                e.printStackTrace();
                             }
-                        });
+                        }
+                    });
 
 
                 }
             });
 
-        }
-        else
-        {
+        } else {
+            //TODO Review - learn what each of these methods do
             SignUp.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
-                    if(hasFocus)
+                    if (hasFocus)
                         SignUp.performClick();
                 }
             });
@@ -124,11 +122,11 @@ public class LogIn_SignUp_Activity extends CustomActivity {
     }
 
 
+    //TODO Review - whats the use of it
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode,resultCode,data);
-        if(requestCode==10&&resultCode== RESULT_OK)
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 10 && resultCode == RESULT_OK)
             finish();
     }
 }
