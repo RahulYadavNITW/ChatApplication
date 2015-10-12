@@ -3,8 +3,8 @@ package com.thenewboston.chatapplication;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.parse.ParseUser;
 
-public class HomeScreen extends CustomActivity implements SearchView.OnQueryTextListener{
+public class HomeScreen extends CustomActivity implements SearchView.OnQueryTextListener {
 
     Toolbar toolbar;
     ViewPager pager;
@@ -58,24 +58,20 @@ public class HomeScreen extends CustomActivity implements SearchView.OnQueryText
     }
 
 
-
-
-
-
     @Override
     protected boolean onPrepareOptionsPanel(View view, Menu menu) {
         return super.onPrepareOptionsPanel(view, menu);
     }
 
-    public void chatWithUser(View v)
-    {
-        SingleContact contact = new SingleContact(v.findViewById(R.id.contactName).toString(),v.findViewById(R.id.contactNumber).toString(),v.findViewById(R.id.emailid).toString(),null,0);
+    public void chatWithUser(View v) {
+        SingleContact contact = new SingleContact(v.findViewById(R.id.contactName).toString(), v.findViewById(R.id.contactNumber).toString(), v.findViewById(R.id.emailid).toString(), null, 0);
         ParseUser user = new ParseUser();
         user.setUsername(contact.getName());
         user.setPassword(contact.getNumber());
         user.setEmail(contact.getEmailid());
         listView_interface.ClickNewUserForChat(user);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -84,6 +80,7 @@ public class HomeScreen extends CustomActivity implements SearchView.OnQueryText
         MenuItem searchItem = menu.findItem(R.id.searchview);
         searchView = (SearchView) searchItem.getActionView();
         setupSearchView(searchItem);
+        searchView.setOnQueryTextListener(HomeScreen.this);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
 //
@@ -132,9 +129,10 @@ public class HomeScreen extends CustomActivity implements SearchView.OnQueryText
             //use the query to search your data somehow
             //   searchContacts(query);
         } else {
-           // Toast.makeText(getApplicationContext(), "UNKNOWN INTENT CALLED IS : " + intent.toString(), Toast.LENGTH_LONG).show();
+            // Toast.makeText(getApplicationContext(), "UNKNOWN INTENT CALLED IS : " + intent.toString(), Toast.LENGTH_LONG).show();
         }
     }
+
     private void setupSearchView(MenuItem searchItem) {
         searchView.setIconifiedByDefault(true);
         // searchView.setOnQueryTextListener(this);
@@ -152,21 +150,21 @@ public class HomeScreen extends CustomActivity implements SearchView.OnQueryText
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        Toast.makeText(getApplicationContext(),"typed"+newText,Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "typed" + newText, Toast.LENGTH_SHORT).show();
         Log.d("type", newText);
-       // searchContacts(newText);
+        // searchContacts(newText);
         return false;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Toast.makeText(getApplicationContext(),"Item Selected" + item.getTitle(),Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Item Selected" + item.getTitle(), Toast.LENGTH_SHORT).show();
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void ClickNewUserForChat(ParseUser user) {
-        if(user==null) return;
+        if (user == null) return;
         Userlist_LeftFragment userlist = new Userlist_LeftFragment();
         userlist.newUser(user);
     }
