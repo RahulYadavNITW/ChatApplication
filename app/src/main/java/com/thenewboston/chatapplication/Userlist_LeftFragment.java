@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -61,15 +62,16 @@ public class Userlist_LeftFragment extends Fragment {
     private void loadUserList()
     {
         final ProgressDialog progressDialog = ProgressDialog.show(getActivity(),null,"Please Wait, Loading...");
-        Toast.makeText(getContext(),user.getObjectId()+"  "+ParseUser.getQuery(),Toast.LENGTH_SHORT).show();
-        ParseUser.getQuery().whereNotEqualTo("objectId", user.getObjectId()).findInBackground(new FindCallback<ParseUser>() {
+        //Toast.makeText(getContext(), user.getObjectId() + "  " + ParseUser.getQuery(), Toast.LENGTH_SHORT).show();
+        ParseQuery parseQuery = new ParseQuery("_User");
+        parseQuery.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {
                 progressDialog.dismiss();
                 if (objects != null) {
                     if (objects.size() == 0) {
                         Toast.makeText(getActivity(), "No Users found", Toast.LENGTH_SHORT).show();
-                        uList = new ArrayList<ParseUser>(objects);
+                        uList = new ArrayList<>(objects);
                         ListView listView = (ListView) getView().findViewById(R.id.list);
                         listView.setAdapter(new UserAdapter());
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -83,6 +85,7 @@ public class Userlist_LeftFragment extends Fragment {
 
                     }
                 } else {
+                    Toast.makeText(getContext(), "Error occured while finding users : ", Toast.LENGTH_SHORT).show();
                     Utils.showDialog(getActivity(), "Error occured while finding users : " + e.getMessage());
                     e.printStackTrace();
                 }
